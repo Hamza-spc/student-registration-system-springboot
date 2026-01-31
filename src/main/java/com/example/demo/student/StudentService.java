@@ -20,15 +20,24 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<Student> getStudents(){
-        return studentRepository.findAll();
+    public List<StudentResponseDTO> getStudents() {
+        return studentRepository.findAll()
+                .stream()
+                .map(StudentMapper::toResponseDTO)// this is the shorter version of this instead : .map(student -> StudentMapper.toResponseDTO(student))
+
+                .toList();
     }
 
-    public void addNewStudent(Student student) {
-        Optional<Student> studentOptional = studentRepository.findStudentByEmail(student.getEmail());
+    public void addNewStudent(StudentRequestDTO dto) {
+        Optional<Student> studentOptional = studentRepository.findStudentByEmail(dto.getEmail());
         if(studentOptional.isPresent()){
             throw new IllegalStateException("email taken");
         }
+        Student student = new Student(
+                dto.getName(),
+                dto.getEmail(),
+                dto.getDob()
+        );
         studentRepository.save(student);
     }
 
@@ -41,7 +50,19 @@ public class StudentService {
     }
 
     @Transactional // so we don't use studentRepository.save(new Student(...)) + Ensures rollback on failure + Prevents partial updates
+    public void updateStudent(Long studentId, StudentUpdateDTO dto) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalStateException("Student not found"));
 
+        if(dto.getName() != null && !dto.getName().isEmpty())
+            student.setName(dto.getName());
+
+        if(dto.getEmail() != null && !dto.getEmail().isEmpty())
+            student.setEmail(dto.getEmail());
+    }
+
+
+    /*
     public void updateStudent(Long studentId, String name, String email) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(()-> new IllegalStateException(" student with id " + studentId + " does not exist"));
@@ -57,5 +78,6 @@ public class StudentService {
             }
             student.setEmail(email);
         }
-    }
+    } */
+
 }

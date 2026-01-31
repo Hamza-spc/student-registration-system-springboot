@@ -18,13 +18,13 @@ public class StudentController {
 
 
     @GetMapping
-    public List<Student> getStudents(){
-        return studentService.getStudents(); //n-tier design pattern
+    public List<StudentResponseDTO> getStudents() {
+        return studentService.getStudents();
     }
 
     @PostMapping
-    public void registerNewStudent(@RequestBody Student student){ //Tells Spring to take the JSON in the request body and convert it into a Student object.
-        studentService.addNewStudent(student);
+    public void registerNewStudent(@RequestBody StudentRequestDTO dto){ //Tells Spring to take the JSON in the request body and convert it into a Student object.
+        studentService.addNewStudent(dto);
     }
 
     @DeleteMapping(path = "{studentId}")
@@ -35,11 +35,22 @@ public class StudentController {
 
     @PutMapping(path = "{studentId}")
     public void updateStudent(
+            @PathVariable Long studentId,
+            @RequestBody StudentUpdateDTO dto
+    ) {
+        studentService.updateStudent(studentId, dto);
+    }
+
+
+    /*
+    @PutMapping(path = "{studentId}")
+    public void updateStudent(
             @PathVariable("studentId") Long studentId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email){
         studentService.updateStudent(studentId,name,email);
     }
+     */
 }
 /*
 This project follows a layered design using Spring Boot and demonstrates basic REST API principles with dependency injection.
