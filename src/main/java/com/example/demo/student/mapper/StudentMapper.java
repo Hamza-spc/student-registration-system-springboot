@@ -1,7 +1,7 @@
-package com.example.demo.student;
+package com.example.demo.student.mapper;
 
-import com.example.demo.student.Student;
-import com.example.demo.student.StudentResponseDTO;
+import com.example.demo.student.model.Student;
+import com.example.demo.student.dto.StudentResponseDTO;
 
 public class StudentMapper {
 

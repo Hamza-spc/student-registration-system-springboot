@@ -1,5 +1,9 @@
-package com.example.demo.student;
+package com.example.demo.student.controller;
 
+import com.example.demo.student.dto.StudentRequestDTO;
+import com.example.demo.student.dto.StudentResponseDTO;
+import com.example.demo.student.service.StudentService;
+import com.example.demo.student.dto.StudentUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
