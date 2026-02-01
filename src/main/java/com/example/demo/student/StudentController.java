@@ -1,9 +1,9 @@
 package com.example.demo.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/student")
@@ -17,10 +17,25 @@ public class StudentController {
     }
 
 
+    @GetMapping // spring sees this method working with Pageable and recognize that it wants pagination info so it automatically reads : page, size, sort from the URL
+    public Page<StudentResponseDTO> getStudents(
+            @RequestParam(required = false) String name, // What happens if you DON’T use required = false? spring says this parameter MUST exist, and it will raise an error but filtering is optional
+            Pageable pageable
+    ) {
+        return studentService.getStudents(name, pageable);
+    }
+
+    /*
+    public Page<StudentResponseDTO> getStudents(Pageable pageable) {
+        return studentService.getStudents(pageable);
+    }
+    */
+    /* before pagination
     @GetMapping
     public List<StudentResponseDTO> getStudents() {
         return studentService.getStudents();
     }
+    */
 
     @PostMapping
     public void registerNewStudent(@RequestBody StudentRequestDTO dto){ //Tells Spring to take the JSON in the request body and convert it into a Student object.

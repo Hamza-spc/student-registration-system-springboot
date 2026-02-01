@@ -2,6 +2,8 @@ package com.example.demo.student;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,6 +22,32 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
+    public Page<StudentResponseDTO> getStudents(
+            String name,
+            Pageable pageable
+    ) {
+        Page<Student> students;
+
+        if (name != null && !name.isBlank()) {
+            students = studentRepository
+                    .findByNameContainingIgnoreCase(name, pageable);
+        } else {
+            students = studentRepository.findAll(pageable);
+        }
+
+        return students.map(StudentMapper::toResponseDTO);
+    }
+
+
+    /* before filtering
+    public Page<StudentResponseDTO> getStudents(Pageable pageable) {
+        return studentRepository
+                .findAll(pageable)
+                .map(StudentMapper::toResponseDTO);
+    }
+    */
+
+    /* before pagination
     public List<StudentResponseDTO> getStudents() {
         return studentRepository.findAll()
                 .stream()
@@ -27,7 +55,7 @@ public class StudentService {
 
                 .toList();
     }
-
+    */
     public void addNewStudent(StudentRequestDTO dto) {
         Optional<Student> studentOptional = studentRepository.findStudentByEmail(dto.getEmail());
         if(studentOptional.isPresent()){
