@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+@Data // already includes @Getter, @Setter, @ToString and many more
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
