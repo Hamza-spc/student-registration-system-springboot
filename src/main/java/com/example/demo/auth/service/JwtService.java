@@ -3,6 +3,7 @@ package com.example.demo.auth.service;
 import com.example.demo.auth.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,7 +23,7 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String token){
+    public boolean isTokenValid(String token, UserDetails userDetails){
         try{
             Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
@@ -32,6 +33,10 @@ public class JwtService {
         }catch(Exception e){
             return false;
         }
+    }
+
+    public String extractUsername(String jwt) {
+        return null;
     }
 }
 

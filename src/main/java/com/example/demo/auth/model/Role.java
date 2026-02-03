@@ -25,6 +25,15 @@ public enum Role {
     @Getter
     private final Set<Permission> permissions;
 
+    /* Commentated because @RequiredArgsConstructor
+    Role(Set<Permission> permissions) {
+        this.permissions = permissions;
+    }
+    👉 The loop runs over USER or ADMIN permissions because
+     getAuthorities() is called on the user’s role instance,
+     and each role already owns its own permission set.
+    */
+
     public List<SimpleGrantedAuthority> getAuthorities() {
 
         List<SimpleGrantedAuthority> authorities =
